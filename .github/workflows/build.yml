@@ -24,13 +24,6 @@ jobs:
         with:
           submodules: true
       
-      - name: Update 
-        run: |
-          cd vanadium
-          git fetch --tags
-          git checkout $(git tag | sort -V | tail -n1)
-          cd ..
-
       - name: Set ENV
         run: | 
           chmod +x *.sh

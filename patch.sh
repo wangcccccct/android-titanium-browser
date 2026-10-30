@@ -29,6 +29,11 @@ sed -i 's|private static boolean verifyPackage(Context ctx, String pkgName, byte
 for flag in "align-wakeups" "android-bottom-bar" "cct-open-in-browser-button-if-allowed-by-embedder" "darken-websites-checkbox-in-themes-setting" "enable-accessibility-sequential-focus" "enforce-incognito-isolation" "inline-pdf-v2" "jump-start-omnibox" "lock-controls-on-tablets-v2" "offline-auto-fetch" "use-fullscreen-insets-api"; do
     sed -i "/\"name\": \"$flag\"/,/}/ s/\"expiry_milestone\": [0-9]\+/\"expiry_milestone\": -1/" chrome/browser/flag-metadata.json
 done
+
+# Keep the address bar at the user's chosen edge on the NTP, focused search,
+# find-in-page, and tab switcher as well as regular web pages.
+perl -0pi -e 's/if \(ntpShowing\s*\|\|\s*tabSwitcherShowing\s*\|\|\s*isOmniboxFocused\s*\|\|\s*isFindInPageShowing\s*\|\|\s*/if (/ or die "ToolbarPositionController state pattern not found\n"' chrome/browser/ui/android/toolbar/java/src/org/chromium/chrome/browser/toolbar/ToolbarPositionController.java
+
 sed -i 's|newFlag(OmniboxFeatureList.OMNIBOX_SITE_SEARCH, FeatureState.ENABLED_IN_TEST);|newFlag(OmniboxFeatureList.OMNIBOX_SITE_SEARCH, FeatureState.ENABLED_IN_PROD);|' components/omnibox/common/android/java/src/org/chromium/components/omnibox/OmniboxFeatures.java # search
 sed -i 's|BASE_FEATURE(kOmniboxSiteSearch, DISABLED);|BASE_FEATURE(kOmniboxSiteSearch, ENABLED);|' components/omnibox/common/omnibox_features.cc # search
 

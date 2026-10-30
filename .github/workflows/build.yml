@@ -28,6 +28,12 @@ jobs:
         run: | 
           chmod +x *.sh
           echo "unix_time=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Configure side-by-side debug app
+        run: |
+          sed -i 's|chrome_public_manifest_package = .*|chrome_public_manifest_package = "io.github.wangcccccct.helium.debug"|' args.gn
+          sed -i 's|is_debug = false|is_debug = true|' args.gn
+          sed -i 's|is_official_build = true|is_official_build = false|' args.gn
     
       - name: Create temporary test signing key
         run: |
